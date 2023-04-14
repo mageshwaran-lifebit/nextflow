@@ -293,11 +293,6 @@ final class TaskPath implements Path, PathEscapeAware {
         FilesEx.resolveSymLink(target)
     }
 
-    @Deprecated
-    BasicFileAttributes readAttributes() {
-        FilesEx.readAttributes(target)
-    }
-
     boolean matches( String pattern ) {
         FilesEx.matches(getFileName(), pattern)
     }

@@ -34,11 +34,6 @@ import nextflow.util.CmdLineOptionMap
 @CompileStatic
 class AwsContainerOptionsMapper {
 
-    @Deprecated
-    static ContainerProperties createContainerOpts(CmdLineOptionMap options) {
-        createContainerProperties(options)
-    }
-
     static ContainerProperties createContainerProperties(CmdLineOptionMap options) {
         final containerProperties = new ContainerProperties()
         if ( options?.hasOptions() ) {
