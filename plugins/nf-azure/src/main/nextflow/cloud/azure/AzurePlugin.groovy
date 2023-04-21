@@ -15,9 +15,8 @@
  */
 package nextflow.cloud.azure
 
-import ai.lifebit.extension.LifebitAzFileSystemProvider
+import nextflow.cloud.azure.nio.LifebitAzFileSystemProvider
 import groovy.transform.CompileStatic
-import nextflow.cloud.azure.nio.AzFileSystemProvider
 import nextflow.file.FileHelper
 import nextflow.plugin.BasePlugin
 import org.pf4j.PluginWrapper

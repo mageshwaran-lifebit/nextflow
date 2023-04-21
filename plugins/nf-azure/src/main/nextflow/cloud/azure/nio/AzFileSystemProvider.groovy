@@ -67,8 +67,8 @@ class AzFileSystemProvider extends FileSystemProvider {
 
     public static final String SCHEME = 'az'
 
-    private Map<String,String> env = new HashMap<>(System.getenv())
-    private Map<String,AzFileSystem> fileSystems = [:]
+    protected Map<String,String> env = new HashMap<>(System.getenv())
+    protected Map<String,AzFileSystem> fileSystems = [:]
     private String sasToken = null
     private String accountKey = null
 
@@ -220,6 +220,8 @@ class AzFileSystemProvider extends FileSystemProvider {
      */
     synchronized AzFileSystem newFileSystem0(String bucket, Map<String, ?> config) throws IOException {
 
+        println("newFileSystem0 : $config ")
+
         if( fileSystems.containsKey(bucket) )
             throw new FileSystemAlreadyExistsException("File system already exists for Azure blob container: `$bucket`")
 
@@ -323,7 +325,6 @@ class AzFileSystemProvider extends FileSystemProvider {
     }
 
     protected AzFileSystem getFileSystem0(String bucket, boolean canCreate) {
-
         def fs = fileSystems.get(bucket)
         if( !fs ) {
             if( canCreate )

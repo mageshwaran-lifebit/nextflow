@@ -15,4 +15,4 @@
 #
 
 #nextflow.cloud.azure.nio.AzFileSystemProvider
-ai.lifebit.extension.LifebitAzFileSystemProvider
+nextflow.cloud.azure.nio.LifebitAzFileSystemProvider
