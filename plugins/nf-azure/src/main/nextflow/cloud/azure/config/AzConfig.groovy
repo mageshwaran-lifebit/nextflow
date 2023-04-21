@@ -16,6 +16,7 @@
 
 package nextflow.cloud.azure.config
 
+import ai.lifebit.extension.LifebitBaseAzConfig
 import groovy.transform.CompileStatic
 import nextflow.Global
 import nextflow.Session
@@ -26,7 +27,7 @@ import nextflow.Session
  * @author Paolo Di Tommaso <paolo.ditommaso@gmail.com>
  */
 @CompileStatic
-class AzConfig {
+class AzConfig extends LifebitBaseAzConfig {
 
     private AzCopyOpts azcopyOpts
 
@@ -41,12 +42,14 @@ class AzConfig {
     private AzActiveDirectoryOpts activeDirectoryOpts
 
     AzConfig(Map azure) {
+        super(azure)
         this.batchOpts = new AzBatchOpts( (Map)azure.batch ?: Collections.emptyMap() )
         this.storageOpts = new AzStorageOpts( (Map)azure.storage ?: Collections.emptyMap() )
         this.registryOpts = new AzRegistryOpts( (Map)azure.registry ?: Collections.emptyMap() )
         this.azcopyOpts = new AzCopyOpts( (Map)azure.azcopy ?: Collections.emptyMap() )
         this.retryConfig = new AzRetryConfig( (Map)azure.retryPolicy ?: Collections.emptyMap() )
         this.activeDirectoryOpts = new AzActiveDirectoryOpts((Map) azure.activeDirectory ?: Collections.emptyMap())
+
     }
 
     AzCopyOpts azcopy() { azcopyOpts }

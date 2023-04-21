@@ -15,6 +15,8 @@
  */
 package nextflow.cloud.azure.batch
 
+import ai.lifebit.extension.LifebitAzHelper
+
 import java.nio.file.Path
 
 import groovy.transform.CompileStatic
@@ -26,6 +28,7 @@ import nextflow.processor.TaskBean
 import nextflow.processor.TaskRun
 import nextflow.util.Duration
 import nextflow.util.Escape
+
 /**
  * Implements file copy strategy for Azure Batch
  *
@@ -64,7 +67,9 @@ class AzFileCopyStrategy extends SimpleFileCopyStrategy {
         copy.remove('PATH')
         copy.put('PATH', '$PWD/.nextflow-bin:$AZ_BATCH_NODE_SHARED_DIR/bin/:$PATH')
         copy.put('AZCOPY_LOG_LOCATION', '$PWD/.azcopy_log')
-        copy.put('AZ_SAS', sasToken)
+
+//        copy.put('AZ_SAS', sasToken)
+        copy.putAll(LifebitAzHelper.getEnvs(this.config, this.sasToken))
 
         // finally render the environment
         final envSnippet = super.getEnvScript(copy,false)

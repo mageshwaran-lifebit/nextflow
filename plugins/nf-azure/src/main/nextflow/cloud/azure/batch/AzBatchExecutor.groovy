@@ -16,6 +16,9 @@
 
 package nextflow.cloud.azure.batch
 
+import ai.lifebit.extension.LifebitAzBatchService
+import ai.lifebit.extension.LifebitAzHelper
+
 import java.nio.file.Path
 
 import groovy.transform.CompileStatic
@@ -99,13 +102,17 @@ class AzBatchExecutor extends Executor implements ExtensionPoint {
 
     protected void initBatchService() {
         config = AzConfig.getConfig(session)
-        batchService = new AzBatchService(this)
+        batchService = new LifebitAzBatchService(this)
 
         // Generate an account SAS token using either activeDirectory configs or storage account keys
         if (!config.storage().sasToken) {
-            config.storage().sasToken = config.activeDirectory().isConfigured()
-                    ? AzHelper.generateContainerSasWithActiveDirectory(workDir, config.storage().tokenDuration)
-                    : AzHelper.generateAccountSasWithAccountKey(workDir, config.storage().tokenDuration)
+            if(config.managedIdentity().isConfigured()) {
+                config.storage().sasToken = LifebitAzHelper.generateContainerSasWithManagedIdentity(workDir, config.storage().tokenDuration)
+            } else {
+                config.storage().sasToken = config.activeDirectory().isConfigured()
+                        ? AzHelper.generateContainerSasWithActiveDirectory(workDir, config.storage().tokenDuration)
+                        : AzHelper.generateAccountSasWithAccountKey(workDir, config.storage().tokenDuration)
+            }
         }
 
         Global.onCleanup((it) -> batchService.close())

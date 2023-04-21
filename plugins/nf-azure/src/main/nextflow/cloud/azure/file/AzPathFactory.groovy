@@ -49,7 +49,9 @@ class AzPathFactory extends FileSystemPathFactory {
 
         final activeDirectoryConfigEnv = AzConfig.getConfig().activeDirectory().getEnv()
 
-        final configEnv = storageConfigEnv + activeDirectoryConfigEnv
+        final managedIdentityConfigEnv = AzConfig.getConfig().managedIdentity().getEnv()
+
+        final configEnv = storageConfigEnv + activeDirectoryConfigEnv + managedIdentityConfigEnv
 
         // find the related file system
         final fs = getFileSystem(uri0(uri), configEnv)
