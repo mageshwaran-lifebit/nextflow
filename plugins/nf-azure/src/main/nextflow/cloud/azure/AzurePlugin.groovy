@@ -15,6 +15,7 @@
  */
 package nextflow.cloud.azure
 
+import ai.lifebit.extension.LifebitAzFileSystemProvider
 import groovy.transform.CompileStatic
 import nextflow.cloud.azure.nio.AzFileSystemProvider
 import nextflow.file.FileHelper
@@ -37,6 +38,7 @@ class AzurePlugin extends BasePlugin {
     void start() {
         super.start()
         // register Azure file system
-        FileHelper.getOrInstallProvider(AzFileSystemProvider)
+//        FileHelper.getOrInstallProvider(AzFileSystemProvider)
+        FileHelper.getOrInstallProvider(LifebitAzFileSystemProvider)
     }
 }

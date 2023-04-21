@@ -15,6 +15,7 @@
  */
 package nextflow.cloud.azure.nio
 
+import ai.lifebit.extension.LifebitAzHelper
 import com.azure.identity.ClientSecretCredentialBuilder
 
 import static java.nio.file.StandardCopyOption.*
@@ -226,22 +227,28 @@ class AzFileSystemProvider extends FileSystemProvider {
         final accountKey = config.get(AZURE_STORAGE_ACCOUNT_KEY) as String
         final sasToken = config.get(AZURE_STORAGE_SAS_TOKEN) as String
 
+        // Service Principal
         final servicePrincipalId = config.get(AZURE_CLIENT_ID) as String
         final servicePrincipalSecret = config.get(AZURE_CLIENT_SECRET) as String
         final tenantId = config.get(AZURE_TENANT_ID) as String
 
+        // Managed Identity
+        final useMsi = config.get(LifebitAzHelper.AZURE_IDENTITY_IS_ENABLED) as Boolean
 
         if( !accountName )
             throw new IllegalArgumentException("Missing AZURE_STORAGE_ACCOUNT_NAME")
 
         def client
 
-        if (servicePrincipalSecret && servicePrincipalId && tenantId) {
+        if (useMsi) {
+
+            client = LifebitAzHelper.createBlobServiceWithManagedIdentity(config, accountName)
+
+        } else if (servicePrincipalSecret && servicePrincipalId && tenantId) {
 
             client = createBlobServiceWithServicePrincipal(accountName, servicePrincipalId, servicePrincipalSecret, tenantId)
 
         } else {
-
             if (!accountKey && !sasToken)
                 throw new IllegalArgumentException("Missing AZURE_STORAGE_ACCOUNT_KEY or AZURE_STORAGE_SAS_TOKEN")
 
